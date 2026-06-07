@@ -18,6 +18,18 @@ require_macos() {
   fi
 }
 
+ensure_command_line_tools() {
+  if xcode-select -p >/dev/null 2>&1; then
+    log "Xcode Command Line Tools are already installed"
+    return
+  fi
+
+  log "Installing Xcode Command Line Tools"
+  xcode-select --install || true
+  printf '\nInstall Xcode Command Line Tools from the macOS dialog, then rerun this script.\n' >&2
+  exit 1
+}
+
 install_homebrew() {
   if command -v brew >/dev/null 2>&1; then
     log "Homebrew is already installed"
@@ -75,6 +87,7 @@ apply_dotfiles() {
 
 main() {
   require_macos
+  ensure_command_line_tools
   install_homebrew
   install_bootstrap_tools
   ensure_github_login
