@@ -79,7 +79,8 @@ init_dotfiles() {
 
 apply_dotfiles() {
   log "Previewing chezmoi changes"
-  chezmoi diff || true
+  # --no-pager: 自动化 bootstrap 里不能让 diff 启动 less 阻塞等待按键。
+  chezmoi diff --no-pager || true
 
   log "Applying chezmoi configuration"
   chezmoi apply -v
